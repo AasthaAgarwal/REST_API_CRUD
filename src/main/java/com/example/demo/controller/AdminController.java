@@ -26,10 +26,9 @@ import com.example.demo.repository.RouteRepo;
 import com.example.demo.repository.Vehicle;
 import com.example.demo.service.Administrator;
 
-
 @RestController
 public class AdminController {
-	
+
 	@Autowired
 	DriverRepo Drepo;
 	@Autowired
@@ -39,172 +38,169 @@ public class AdminController {
 	@Autowired
 	Administrator admin;
 
-	//testedok
-	@PostMapping("/Driver")  
+	// testedok
+	@PostMapping("/Driver")
 	public DriverBean addDriver(@RequestBody DriverBean ataAdd) {
 		admin.addDriver(ataAdd);
 		return ataAdd;
-		
+
 	}
-	
-	//testedok
+
+	// testedok
 	@GetMapping("/Driver")
-	
+
 	public List<DriverBean> getDriver() {
-		
+
 		return Drepo.findAll();
 	}
-	
-	//testedok
+
+	// testedok
 	@RequestMapping("/Driver/{driverId}")
-	
-	public Optional<DriverBean> getDriver(@PathVariable("driverId") int driverId){
-		
+
+	public Optional<DriverBean> getDriver(@PathVariable("driverId") int driverId) {
+
 		return Drepo.findById(driverId);
 	}
-				
-	//testedok
+
+	// testedok
 	@DeleteMapping("/Driver/{driverId}")
 	public String deleteDriver(@PathVariable int driverId) {
-		
+
 		ArrayList<Integer> drivers = new ArrayList<Integer>();
 		drivers.add(driverId);
 		int numOfDriverDdeleted = admin.deleteDriver(drivers);
-		return numOfDriverDdeleted +  " Deleted";
+		return numOfDriverDdeleted + " Deleted";
 	}
-	
-	//testedok
+
+	// testedok
 	@PutMapping("/Driver/{driverId}")
-	public String modifyDriver(@RequestBody DriverBean driver , @PathVariable int driverId) {
+	public String modifyDriver(@RequestBody DriverBean driver, @PathVariable int driverId) {
 		Optional<DriverBean> driverOptional = Drepo.findById(driverId);
 
 		if (!driverOptional.isPresent()) {
-		//	ResponseEntity<Object> a = ResponseEntity.notFound().build();
+			// ResponseEntity<Object> a = ResponseEntity.notFound().build();
 			return "driver does not exist";
 		}
 		driver.setDriverId(driverId);
-		
+
 		Drepo.save(driver);
-	//	ResponseEntity<Object> b = ResponseEntity.noContent().build();
+		// ResponseEntity<Object> b = ResponseEntity.noContent().build();
 		return "driver updated";
-		
-		
+
 	}
-	
-	//testedok
+
+	// testedok
 	@PostMapping("/Vehicle")
 	public VehicleBean addVehicle(@RequestBody VehicleBean vehicle) {
 //		D = new 
 		admin.addVehicle(vehicle);
 //		Drepo.save(ataadd);
 		return vehicle;
-		
+
 	}
-	
-	//testedok
+
+	// testedok
 	@GetMapping("/Vehicle")
-	
+
 	public List<VehicleBean> getVehicle() {
-		
+
 		return admin.listAllVehicle();
 	}
-	
-	//testedok
+
+	// testedok
 	@RequestMapping("/Vehicle/{vehicleId}")
-	
-	public VehicleBean getVehicle(@PathVariable("vehicleId") int vehicleId){
-		
+
+	public VehicleBean getVehicle(@PathVariable("vehicleId") int vehicleId) {
+
 		return admin.viewVehicle(vehicleId);
 	}
-				
-	//testedok
+
+	// testedok
 	@DeleteMapping("/Vehicle/{vehicleId}")
 	public String deleteVehicle(@PathVariable int vehicleId) {
-		
+
 		ArrayList<Integer> vehicle = new ArrayList<Integer>();
 		vehicle.add(vehicleId);
 		int numOfVehicleDdeleted = admin.deleteVehicle(vehicle);
-		return numOfVehicleDdeleted +  "Deleted";
+		return numOfVehicleDdeleted + "Deleted";
 	}
-	
-	//testedok
+
+	// testedok
 	@PutMapping("/Vehicle/{vehicleId}")
-	public ResponseEntity<Object> modifyVehicle(@RequestBody VehicleBean vehicle , @PathVariable int vehicleId) {
+	public ResponseEntity<Object> modifyVehicle(@RequestBody VehicleBean vehicle, @PathVariable int vehicleId) {
 		Optional<VehicleBean> vehicleOptional = vRepo.findById(vehicleId);
 
 		if (!vehicleOptional.isPresent())
 			return ResponseEntity.notFound().build();
 
 		vehicle.setVehicleId(vehicleId);
-		
-		vRepo.save(vehicle); 
+
+		vRepo.save(vehicle);
 
 		return ResponseEntity.noContent().build();
 	}
-	
-	//testedok
+
+	// testedok
 	@PostMapping("/Route")
 	public RouteBean addRoute(@RequestBody RouteBean route) {
 //		D = new 
 		admin.addRoute(route);
 //		Drepo.save(ataadd);
 		return route;
-		
+
 	}
-	
-	//testedok
+
+	// testedok
 	@DeleteMapping("/Route/{routeId}")
 	public String deleteRoute(@PathVariable int routeId) {
-		
+
 		ArrayList<Integer> route = new ArrayList<Integer>();
 		route.add(routeId);
 		int numOfRouteDeleted = admin.deleteRoute(route);
-		return numOfRouteDeleted +  "Deleted";
+		return numOfRouteDeleted + "Deleted";
 	}
-	
-	//testedok
-@GetMapping("/Route")
-	
+
+	// testedok
+	@GetMapping("/Route")
+
 	public List<RouteBean> getRoute() {
-		
+
 		return admin.listAllRoute();
 	}
-	
+
 //testedok
 	@RequestMapping("/Route/id/{routeId}")
-		public RouteBean getRoute(@PathVariable("routeId") int routeId){
+	public RouteBean getRoute(@PathVariable("routeId") int routeId) {
 		System.out.println("skdjhvsdkjhdsfhds");
 		return admin.viewRoute(routeId);
 	}
-	
-//testedok
-@GetMapping("/Route/{source}/{destination}")
-public Optional<RouteBean> getRouteBy(@PathVariable("source") String source , @PathVariable("destination") String destination){
-	
-			return rRepo.findBySourceAndDestination(source, destination);
-		
-}
 
 //testedok
-@GetMapping("/Route/source/{source}")
-public Optional<RouteBean> getRouteBy(@PathVariable("source") String source){
-	
-	return rRepo.findBySource(source);
-	
-}
+	@GetMapping("/Route/{source}/{destination}")
+	public Optional<RouteBean> getRouteBy(@PathVariable("source") String source,
+			@PathVariable("destination") String destination) {
+
+		return rRepo.findBySourceAndDestination(source, destination);
+
+	}
 
 //testedok
-@PostMapping("/allot/{reservationId}/{driverid}")
-public boolean allotDriver(@PathVariable("reservationId") int reservationId , @PathVariable("driverid") int driverId){
+	@GetMapping("/Route/source/{source}")
+	public Optional<RouteBean> getRouteBy(@PathVariable("source") String source) {
 
-	boolean b = admin.allotDriver(reservationId, driverId);
-    System.out.println(b);
-	return b;
-	
+		return rRepo.findBySource(source);
+
+	}
+
+//testedok
+	@PostMapping("/allot/{reservationId}/{driverid}")
+	public boolean allotDriver(@PathVariable("reservationId") int reservationId,
+			@PathVariable("driverid") int driverId) {
+
+		boolean b = admin.allotDriver(reservationId, driverId);
+		System.out.println(b);
+		return b;
+
+	}
+
 }
-
-
-}
-
-	
-	
